@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <title>Product</title>
@@ -113,11 +114,50 @@
                         </tbody>
                     </table>
                 </div>
-            </div
+            </div>
             <br>
-            <a href="/admin/exportProduct">
-                <button type="button" class="btn btn-success">Export to CSV</button>
-            </a>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Import Book data as a CSV file...</h4>
+                    <c:if test="${mssImport != null}">
+                        <div class="alert alert-danger">
+                            <c:out value="${mssImport}"/>
+                        </div>
+                    </c:if>
+                    <form:form action="/admin/importProduct" method="POST" enctype="multipart/form-data">
+                        <div class="input-group">
+                            <input name="file" type="file" class="form-control"/>
+                            <button type="submit" class="btn btn-info">Import</button>&emsp;
+                            <span class="input-group-btn">
+                                <a href="/admin/exportProduct">
+                                    <button type="button" class="btn btn-success">Export Product</button>
+                                </a>
+                            </span>
+                            <span class="input-group-btn">
+                                <a href="/admin/exportProductDetail">
+                                    <button type="button" class="btn btn-success">Export Product Detail</button>
+                                </a>
+                            </span>
+                        </div>
+                    </form:form>
+                    <%--                    <span class="input-group-btn">--%>
+                    <%--                        <button type="button" class="btn btn-success">Export to CSV</button>--%>
+                    <%--                    </span>--%>
+                    <%--                    <button type="button" class="btn btn-success">Export to CSV</button>--%>
+
+                    <%--                    <a href="/export-csv">--%>
+                    <%--                        <button type="button" class="btn btn-success">Export to CSV</button>--%>
+                    <%--                    </a>--%>
+                </div>
+            </div>
+<%--            <div>--%>
+
+<%--                <a href="/admin/exportProduct">--%>
+<%--                    <button type="button" class="btn btn-success">Export to CSV</button>--%>
+<%--                </a>--%>
+
+<%--            </div>--%>
+
 
 <%--            <div>--%>
 <%--                <button href="/admin/newProduct" class="accordion-button fa-solid fa-plus me-0" type="button">--%>

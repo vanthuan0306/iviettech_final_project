@@ -17,7 +17,8 @@ import java.util.List;
 
 public class CSVHelper {
     public static String TYPE = "text/csv";
-    static String[] PRODUCTS = { "Name", "Category_Detail_ID", "Orginal_Price", "Actual_Price", "Manufactor_ID", "Add_Date", "Status", "Description", "Infor" };
+    static String[] PRODUCTS = { "ID", "Name", "Category_Detail_ID", "Orginal_Price", "Actual_Price", "Manufactor_ID", "Add_Date", "Status", "Description", "Infor" };
+    static String[] PRODUCTDETAILS = { "ID", "Name", "Category_Detail_ID", "Orginal_Price", "Actual_Price", "Manufactor_ID", "Add_Date", "Status", "Description", "Infor" };
 
     public static boolean hasCSVFormat(MultipartFile file) {
         if (!TYPE.equals(file.getContentType())) {
@@ -34,23 +35,24 @@ public class CSVHelper {
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
             for (CSVRecord csvRecord : csvRecords) {
                 ProductEntity product = new ProductEntity();
-                product.setName(csvRecord.get(PRODUCTS[0]));
+                product.setId(Integer.parseInt(csvRecord.get(PRODUCTS[0])));
+                product.setName(csvRecord.get(PRODUCTS[1]));
 
                 CategoryDetailEntity categoryDetail = new CategoryDetailEntity();
-                categoryDetail.setId(Integer.parseInt(csvRecord.get(PRODUCTS[1])));
+                categoryDetail.setId(Integer.parseInt(csvRecord.get(PRODUCTS[2])));
                 product.setCategoryDetail(categoryDetail);
 
-                product.setOriginal_price(Double.parseDouble(csvRecord.get(PRODUCTS[2])));
-                product.setActual_price(Double.parseDouble(csvRecord.get(PRODUCTS[3])));
+                product.setOriginal_price(Double.parseDouble(csvRecord.get(PRODUCTS[3])));
+                product.setActual_price(Double.parseDouble(csvRecord.get(PRODUCTS[4])));
 
                 ManufactorEntity manufactor = new ManufactorEntity();
-                manufactor.setId(Integer.parseInt(csvRecord.get(PRODUCTS[4])));
+                manufactor.setId(Integer.parseInt(csvRecord.get(PRODUCTS[5])));
                 product.setManufactor(manufactor);
 
-                product.setAddDate(new SimpleDateFormat("dd/MM/yyyy").parse(csvRecord.get(PRODUCTS[5])));
-                product.setStatus(Integer.parseInt(csvRecord.get(PRODUCTS[6])));
-                product.setDescription(csvRecord.get(PRODUCTS[7]));
-                product.setAdditionInfo(csvRecord.get(PRODUCTS[8]));
+                product.setAddDate(new SimpleDateFormat("dd/MM/yyyy").parse(csvRecord.get(PRODUCTS[6])));
+                product.setStatus(Integer.parseInt(csvRecord.get(PRODUCTS[7])));
+                product.setDescription(csvRecord.get(PRODUCTS[8]));
+                product.setAdditionInfo(csvRecord.get(PRODUCTS[9]));
 
                 productEntityList.add(product);
 

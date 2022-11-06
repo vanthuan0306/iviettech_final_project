@@ -1,7 +1,7 @@
 package com.iviettech.finalproject.controller;
 
 import com.iviettech.finalproject.entity.*;
-import com.iviettech.finalproject.helper.ProductRawExport;
+import com.iviettech.finalproject.helper.CSVHelper;
 import com.iviettech.finalproject.repository.*;
 import com.iviettech.finalproject.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.prefs.CsvPreference;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -62,6 +58,8 @@ public class AdminController {
     @RequestMapping(method = GET)
     public String viewAdmin(Model model) {
 
+        model.addAttribute("action", "/admin/seachOrder");
+
         Double totalDay = orderRepository.getTotalDay();
         model.addAttribute("totalDay", totalDay);
 
@@ -94,6 +92,7 @@ public class AdminController {
     public String viewProduct(Model model) {
         List<ProductEntity> productList = (List<ProductEntity>) productRepository.findAll();
         model.addAttribute("productList", productList);
+        model.addAttribute("action", "/admin/importProduct");
 
         return "admin/ad_product";
     }
@@ -156,35 +155,27 @@ public class AdminController {
     }
 
     @GetMapping("/exportProduct")
-    public void exportCSVfile(HttpServletResponse response) throws IOException {
-        response.setContentType("text/csv");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        String currentDateTime = dateFormatter.format(new Date());
+    public void exportProduct(HttpServletResponse response) throws IOException {
+        adminService.exportProduct(response);
+    }
 
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=Product_" + currentDateTime + ".csv";
-        response.setHeader(headerKey, headerValue);
-
-        List<ProductEntity> productEntityList = (List<ProductEntity>) productRepository.findAll();
-
-        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = { "Name", "Category_Detail_ID", "Orginal_Price", "Actual_Price", "Manufactor_ID", "Add_Date", "Status", "Description", "Infor" };
-        String[] nameMapping = { "name", "category_detail_id", "original_price", "actual_price", "manufactor_id", "add_date", "status", "description", "addition_info"};
-
-        csvWriter.writeHeader(csvHeader);
-
-        for (ProductEntity productEntity : productEntityList) {
+    @RequestMapping(value = "/importProduct", method = POST)
+    @ResponseBody
+    public String importProduct(@RequestParam("file") MultipartFile file, Model model) {
+        if (CSVHelper.hasCSVFormat(file)) {
             try {
-//                BookRawExport data = new BookRawExport(bookEntity);
-                ProductRawExport data = new ProductRawExport(productEntity);
-                csvWriter.write(data, nameMapping);
+                adminService.saveProduct(file);
+                model.addAttribute("mssImport", "The CSV file has been imported successfully");
+//                return "redirect:/admin/adProduct";
             } catch (Exception e) {
-                System.out.println("Skip this record/data");
-                continue;
+                model.addAttribute("mssImport","The CSV file has NOT been imported");
+
+//                return "redirect:/admin/adProduct";
             }
         }
+        model.addAttribute("mssImport","Please upload a proper CSV file!");
 
-        csvWriter.close();
+        return "redirect:/admin/adProduct";
     }
 
     // ---------------------------Product Details
@@ -242,6 +233,11 @@ public class AdminController {
         productDetailRepository.save(productDetail);
 
         return "redirect:/admin/adProductDetail/" + productDetail.getProduct().getId();
+    }
+
+    @GetMapping("/exportProductDetail")
+    public void exportProductDetail(HttpServletResponse response) throws IOException {
+        adminService.exportProductDetail(response);
     }
 
     //Product Image
@@ -460,8 +456,23 @@ public class AdminController {
             model.addAttribute("order", order);
             orderRepository.save(order);
         }
-        return "redirect:/admin/adProduct";
+        return "redirect:/admin/adOrder";
 
+    }
+
+    @RequestMapping("/seachOrder")
+    public String seachOrder(@RequestParam(name = "startDate", required = false) String startDate,
+                             @RequestParam(name = "endDate", required = false) String endDate, Model model){
+
+        java.sql.Date date1 = java.sql.Date.valueOf(startDate);
+        java.sql.Date date2 = java.sql.Date.valueOf(endDate);
+
+        List<OrderEntity> orderList =  orderRepository.getOrderFromTo(date1, date2);
+
+        model.addAttribute("orderList", orderList);
+
+
+        return "redirect:/admin/adOrder";
     }
 
     //Order Detail

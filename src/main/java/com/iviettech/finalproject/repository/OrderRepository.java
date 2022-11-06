@@ -25,8 +25,8 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Integer> {
     List<OrderEntity> getOrderYear();
 
 
-    @Query(value = "SELECT * FROM orders WHERE require_date BETWEEN ?1 AND ?2", nativeQuery = true)
-    List<OrderEntity> getOrderFromTo(Date date1, Date date2);
+    @Query(value = "SELECT * FROM orders WHERE (require_date BETWEEN ?1 AND ?2) AND order_status = 0", nativeQuery = true)
+    List<OrderEntity> getOrderFromTo(java.sql.Date date1, java.sql.Date date2);
 
     List<OrderEntity> findTop5ByOrderStatusOrderByIdDesc(int orderStatus);
 
