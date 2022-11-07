@@ -74,6 +74,9 @@ public class AdminController {
         }
         String totalOrderPrice = Arrays.toString(totalPricePerMonth).substring(1, Arrays.toString(totalPricePerMonth).length() - 1);
         String totalOrderNumber = Arrays.toString(totalOrderPerMonth).substring(1, Arrays.toString(totalOrderPerMonth).length() - 1);
+
+        System.out.println(totalOrderPrice);
+        System.out.println(totalOrderNumber);
         // for bar chart
         model.addAttribute("total_order_price", totalOrderPrice);
         model.addAttribute("total_order_number", totalOrderNumber);
@@ -160,8 +163,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/importProduct", method = POST)
-    @ResponseBody
-    public String importProduct(@RequestParam("file") MultipartFile file, Model model) {
+    public String importProduct(@RequestParam(value = "file", required = false) MultipartFile file, Model model) {
         if (CSVHelper.hasCSVFormat(file)) {
             try {
                 adminService.saveProduct(file);
@@ -173,7 +175,7 @@ public class AdminController {
 //                return "redirect:/admin/adProduct";
             }
         }
-        model.addAttribute("mssImport","Please upload a proper CSV file!");
+//        model.addAttribute("mssImport","Please upload a proper CSV file!");
 
         return "redirect:/admin/adProduct";
     }
@@ -475,12 +477,18 @@ public class AdminController {
         return "redirect:/admin/adOrder";
     }
 
+    @GetMapping("/exportOrder")
+    public void exportOrder(HttpServletResponse response) throws IOException {
+        adminService.exportOrderDetail(response);
+    }
+
     //Order Detail
     @RequestMapping(value = "/adOrderDetail/{id}", method = GET)
     public String viewOrderDetail(Model model, @PathVariable("id") int id) {
 
         List<OrderDetailEntity> orderDetailList =
                 (List<OrderDetailEntity>) orderDetailRepository.findByOrderEntityId(id);
+//        List<OrderDetailEntity> orderDetailList = (List<OrderDetailEntity>) orderDetailRepository.findAll();
         model.addAttribute("orderDetailList", orderDetailList);
 
         return "admin/ad_order_detail";

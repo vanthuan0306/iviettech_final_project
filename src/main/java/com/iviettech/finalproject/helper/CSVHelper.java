@@ -31,11 +31,14 @@ public class CSVHelper {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
              CSVParser csvParser = new CSVParser(fileReader,
                      CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
+
             List<ProductEntity> productEntityList = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
+
             for (CSVRecord csvRecord : csvRecords) {
                 ProductEntity product = new ProductEntity();
-                product.setId(Integer.parseInt(csvRecord.get(PRODUCTS[0])));
+
+//                product.setId(Integer.parseInt(csvRecord.get(PRODUCTS[0])));
                 product.setName(csvRecord.get(PRODUCTS[1]));
 
                 CategoryDetailEntity categoryDetail = new CategoryDetailEntity();
@@ -49,7 +52,7 @@ public class CSVHelper {
                 manufactor.setId(Integer.parseInt(csvRecord.get(PRODUCTS[5])));
                 product.setManufactor(manufactor);
 
-                product.setAddDate(new SimpleDateFormat("dd/MM/yyyy").parse(csvRecord.get(PRODUCTS[6])));
+//                product.setAddDate(new SimpleDateFormat("dd/MM/yyyy").parse(csvRecord.get(PRODUCTS[6])));
                 product.setStatus(Integer.parseInt(csvRecord.get(PRODUCTS[7])));
                 product.setDescription(csvRecord.get(PRODUCTS[8]));
                 product.setAdditionInfo(csvRecord.get(PRODUCTS[9]));
@@ -60,7 +63,7 @@ public class CSVHelper {
             }
 
             return productEntityList;
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
     }

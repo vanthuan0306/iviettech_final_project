@@ -1,11 +1,7 @@
 package com.iviettech.finalproject.service;
 
-import com.iviettech.finalproject.entity.ProductDetailEntity;
-import com.iviettech.finalproject.entity.ProductEntity;
-import com.iviettech.finalproject.entity.ProductImageEntity;
-import com.iviettech.finalproject.helper.CSVHelper;
-import com.iviettech.finalproject.helper.ProductDetailRawExport;
-import com.iviettech.finalproject.helper.ProductRawExport;
+import com.iviettech.finalproject.entity.*;
+import com.iviettech.finalproject.helper.*;
 import com.iviettech.finalproject.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +50,10 @@ public class AdminService {
 
     @Autowired
     ServletContext servletContext;
+
+    public void findByOrderID(int id) {
+        List<OrderDetailEntity> orderDetailEntityList = orderDetailRepository.findByOrderEntityId(id);
+    }
 
 
     public void uploadFile(MultipartFile file,int id) {
@@ -180,6 +180,70 @@ public class AdminService {
 //            e.printStackTrace();
 //        }
 //    }
+
+
+    //-----------------------------------------order
+    public void exportOrderDetail(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=Order_" + currentDateTime + ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        List<OrderDetailEntity> orderDetailEntityList = (List<OrderDetailEntity>) orderDetailRepository.findAll();
+
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = { "id", "OrderID", "First_Name", "Last_Name", "Email", "Phone_Number", "Address", "Product_Name", "Color", "Size", "Quantity", "Price", "Require_Date", "All_Total", "Payment" };
+        String[] nameMapping = { "id", "order_id", "first_name", "last_name", "email", "phone", "address", "product_id", "color", "size", "quantity", "price", "req_date", "total_amount", "payment"};
+
+        csvWriter.writeHeader(csvHeader);
+
+        for (OrderDetailEntity orderDetail : orderDetailEntityList) {
+            try {
+//                BookRawExport data = new BookRawExport(bookEntity);
+                OrderDetailRawExport data = new OrderDetailRawExport(orderDetail);
+                csvWriter.write(data, nameMapping);
+            } catch (Exception e) {
+                System.out.println("Skip this record/data");
+                continue;
+            }
+        }
+
+        csvWriter.close();
+    }
+    public void exportOrder(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=Order_" + currentDateTime + ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        List<OrderEntity> orderEntityList = (List<OrderEntity>) orderRepository.findAll();
+
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = { "OrderID", "First_Name", "Last_Name", "Email", "Phone_Number", "Address", "Product_Name", "Color", "Size", "Quantity", "Price", "Require_Date", "All_Total", "Payment" };
+        String[] nameMapping = { "order_id", "first_name", "last_name", "email", "phone", "address", "product_id", "color", "size", "quantity", "price", "req_date", "total_amount", "payment"};
+
+        csvWriter.writeHeader(csvHeader);
+
+        for (OrderEntity order : orderEntityList) {
+            try {
+//                BookRawExport data = new BookRawExport(bookEntity);
+                OrderRawExport data = new OrderRawExport(order);
+                csvWriter.write(data, nameMapping);
+            } catch (Exception e) {
+                System.out.println("Skip this record/data");
+                continue;
+            }
+        }
+
+        csvWriter.close();
+    }
+
 
 
 }
