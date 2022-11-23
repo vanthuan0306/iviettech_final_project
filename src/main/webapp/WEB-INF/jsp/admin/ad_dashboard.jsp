@@ -52,53 +52,8 @@
             </div>
         </div>
     </div>
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Last 5 pending orders
-        </div>
-        <div class="card-body">
-            <table id="datatablesSimple">
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Total</th>
-                </tr>
-                </thead>
-                <tfoot>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Total</th>
-                </tr>
-                </tfoot>
-                <tbody>
-                <c:forEach items="${order_data_list}" var="order">
-                    <tr>
-                        <td>${order.id}</td>
-                        <td>
-                            <a href="<c:url value="/admin/adOrderDetail/${order.id}"/>">${order.firstName} ${order.lastName}</a>
-                        </td>
-                        <td>${order.phoneNumber}</td>
-                        <td>${order.email}</td>
-                        <td>${order.addressDetail}</td>
-                        <td>
-                                ${order.totalAmount}
-                        </td>
-                    </tr>
-                </c:forEach>
+    <br>
 
-                </tbody>
-            </table>
-        </div>
-    </div>
 </div>
 </body>
 </html>

@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <body class="animsition">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/resources/vendor/jquery/jquery.min.js"></script>
 <script src="/resources/js/active-link.js"></script>
 <!-- Header -->
 <header class="header-v4">
@@ -22,12 +22,37 @@
                 </div>
 
                 <div class="right-top-bar flex-w h-full">
+<%--                    <a href="#" class="flex-c-m trans-04 p-lr-25">--%>
+<%--                        My Account--%>
+<%--                        <span class="caret"></span>--%>
+<%--                    </a>--%>
+                    <div class="dropdown dropdown-topbar">
+                        <a href="" class="flex-c-m trans-04 p-lr-25">
+                           <c:choose>
+                               <c:when test="${sessionScope.user != null}">Welcome ${sessionScope.user.firstName}!</c:when>
+                               <c:otherwise>My Account</c:otherwise>
+                           </c:choose>
+                        </a>
+                        <div class="dropdown-content dropdown-content-topbar">
+                            <a href="/admin" class="flex-c-m trans-04 p-lr-25" style="${sessionScope.user.role.id != 2?"display: none":""}">
+                                Admin Page
+                            </a>
+                            <a href="/user/profile" class="flex-c-m trans-04 p-lr-25" style="${sessionScope.user == null?"display: none":""}">
+                                My Profile
+                            </a>
+                            <a href="/login" class="flex-c-m trans-04 p-lr-25" style="${sessionScope.user != null?"display: none":""}">
+                                Login
+                            </a>
+                            <a href="/logout" class="flex-c-m trans-04 p-lr-25" style="${sessionScope.user == null?"display: none":""}">
+                                Logout
+                            </a>
+                            <a href="/register" class="flex-c-m trans-04 p-lr-25" style="${sessionScope.user != null?"display: none":""}">
+                                Register
+                            </a>
+                        </div>
+                    </div>
                     <a href="#" class="flex-c-m trans-04 p-lr-25">
                         Help & FAQs
-                    </a>
-
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        My Account
                     </a>
 
                     <a href="#" class="flex-c-m trans-04 p-lr-25">
@@ -157,9 +182,22 @@
                         Help & FAQs
                     </a>
 
-                    <a href="#" class="flex-c-m p-lr-10 trans-04">
-                        My Account
-                    </a>
+                    <div class="dropdown dropdown-topbar">
+                        <a class="flex-c-m trans-04 p-lr-25">
+                            My Profile
+                        </a>
+                        <div class="dropdown-content dropdown-content-topbar">
+                            <a href="" class="flex-c-m trans-04 p-lr-25">
+                                My Profile
+                            </a>
+                            <a href="" class="flex-c-m trans-04 p-lr-25">
+                                Login
+                            </a>
+                            <a href="" class="flex-c-m trans-04 p-lr-25">
+                                Logout
+                            </a>
+                        </div>
+                    </div>
 
                     <a href="#" class="flex-c-m p-lr-10 trans-04">
                         EN
@@ -278,9 +316,9 @@
                         View Cart
                     </a>
 
-                    <a href="/checkout?data=" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
-                        Check Out
-                    </a>
+<%--                    <a href="/checkout?data=" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">--%>
+<%--                        Check Out--%>
+<%--                    </a>--%>
                 </div>
             </div>
         </div>

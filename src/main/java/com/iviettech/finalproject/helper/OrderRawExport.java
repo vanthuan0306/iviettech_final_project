@@ -3,7 +3,6 @@ package com.iviettech.finalproject.helper;
 import com.iviettech.finalproject.entity.OrderDetailEntity;
 import com.iviettech.finalproject.entity.OrderEntity;
 import com.iviettech.finalproject.repository.OrderDetailRepository;
-import com.iviettech.finalproject.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;

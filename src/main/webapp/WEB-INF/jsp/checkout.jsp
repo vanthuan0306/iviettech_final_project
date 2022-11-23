@@ -127,14 +127,14 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="firstName">First name</label>
-                <form:input path="firstName" type="text" class="form-control" id="firstName" placeholder="" value="" required="true"/>
+                <form:input path="firstName" type="text" class="form-control" id="firstName" placeholder="" value="${sessionScope.user.firstName}" required="true"/>
                 <div class="invalid-feedback">
                   Valid first name is required.
                 </div>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="lastName">Last name</label>
-                <form:input path="lastName" type="text" class="form-control" id="lastName" placeholder="" value="" required="true"/>
+                <form:input path="lastName" type="text" class="form-control" id="lastName" placeholder="" value="${sessionScope.user.lastName}" required="true"/>
                 <div class="invalid-feedback">
                   Valid last name is required.
                 </div>
@@ -144,7 +144,7 @@
             <div class="mb-3">
               <label for="phoneNumber">Phone number</label>
               <div class="input-group">
-                <form:input path="phoneNumber"  type="text" class="form-control" id="phoneNumber" placeholder="0905545462" required="true"/>
+                <form:input path="phoneNumber"  type="text" class="form-control" id="phoneNumber" value="${sessionScope.user.phoneNumber}" placeholder="0905545462" required="true"/>
                 <div class="invalid-feedback" style="width: 100%;">
                   Your phone number is required.
                 </div>
@@ -153,28 +153,17 @@
 
             <div class="mb-3">
               <label for="email">Email <span class="text-muted">(Optional)</span></label>
-              <form:input path="email" type="email" class="form-control" id="email" placeholder="example@gmail.com"/>
+              <form:input path="email" type="email" class="form-control" id="email" value="${sessionScope.user.email}" placeholder="example@gmail.com"/>
               <div class="invalid-feedback">
                 Please enter a valid email address for shipping updates.
               </div>
             </div>
 
-            <%--        <div class="mb-3">--%>
-            <%--          <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>--%>
-            <%--          <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">--%>
-            <%--        </div>--%>
-
             <div class="row">
               <div class="col-md-4 mb-3">
                 <label for="province">Province</label>
-                  <%--            <select class="custom-select d-block w-100" id="province" required>--%>
-                  <%--              <option value='-1'>Select an option</option>--%>
-                  <%--              <c:forEach items="${province}" var="province">--%>
-                  <%--              <option value="${province.id }">${province.nameEn}</option>--%>
-                  <%--              </c:forEach>--%>
-                  <%--            </select>--%>
-                <form:select path="province" class="custom-select d-block w-100" id="province" required="true">
-                  <form:option value='-1'>Select an option</form:option>
+                <form:select path="province.id" class="custom-select d-block w-100" id="province" required="true">
+                  <form:option value='${sessionScope.user.province.id}'>${sessionScope.user.province.fullNameEn}</form:option>
                   <form:options items="${province}"/>
                 </form:select>
                 <div class="invalid-feedback">
@@ -183,7 +172,8 @@
               </div>
               <div class="col-md-4 mb-3">
                 <label for="district">District</label>
-                <form:select path="district" class="custom-select d-block w-100" id="district" required="true">
+                <form:select path="district.id" class="custom-select d-block w-100" id="district" value="${sessionScope.user.district.id}" required="true">
+                  <form:option value='${sessionScope.user.district.id}'>${sessionScope.user.district.fullNameEn}</form:option>
                 </form:select>
                 <div class="invalid-feedback">
                   Please provide a valid district.
@@ -191,7 +181,8 @@
               </div>
               <div class="col-md-4 mb-3">
                 <label for="ward">Ward</label>
-                <form:select path="ward" class="custom-select d-block w-100" id="ward" required="true">
+                <form:select path="ward.id" class="custom-select d-block w-100" id="ward" value="${sessionScope.user.ward.id}" required="true">
+                  <form:option value='${sessionScope.user.ward.id}'>${sessionScope.user.ward.fullNameEn}</form:option>
                 </form:select>
                 <div class="invalid-feedback">
                   Please provide a valid ward.
@@ -200,22 +191,22 @@
             </div>
             <div class="mb-3">
               <label for="address">Address detail</label>
-              <form:input path="addressDetail" type="text" class="form-control" id="address" placeholder="234 Hang Ma St or Phuong Nam Village" required="true"/>
+              <form:input path="addressDetail" type="text" class="form-control" id="address" value="${sessionScope.user.addressDetail}" placeholder="234 Hang Ma St or Phuong Nam Village" required="true"/>
               <div class="invalid-feedback">
                 Please enter your shipping address.
               </div>
             </div>
-            <hr class="mb-4">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="same-address">
-              <label class="custom-control-label" for="same-address">Shipping address is the same as my
-                billing
-                address</label>
-            </div>
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="save-info">
-              <label class="custom-control-label" for="save-info">Save this information for next time</label>
-            </div>
+<%--            <hr class="mb-4">--%>
+<%--            <div class="custom-control custom-checkbox">--%>
+<%--              <input type="checkbox" class="custom-control-input" id="same-address">--%>
+<%--              <label class="custom-control-label" for="same-address">Shipping address is the same as my--%>
+<%--                billing--%>
+<%--                address</label>--%>
+<%--            </div>--%>
+<%--            <div class="custom-control custom-checkbox">--%>
+<%--              <input type="checkbox" name="saveInfo" value="saveInfo" class="custom-control-input" id="save-info">--%>
+<%--              <label class="custom-control-label" for="save-info">Save this information for next time</label>--%>
+<%--            </div>--%>
             <hr class="mb-4">
 
             <h4 class="mb-3">Payment</h4>
@@ -229,14 +220,14 @@
                 <label class="custom-control-label" for="cod">COD</label>
               </div>
               <div class="custom-control custom-radio">
-                <form:radiobutton path="paymentMethod" value="Credit card" id="credit" title="paymentMethod" cssClass="custom-control-input"
+                <form:radiobutton path="paymentMethod" value="CreditCard" id="credit" title="paymentMethod" cssClass="custom-control-input"
                                   required="true"></form:radiobutton>
                   <%--            <form:input path="paymentMethod" id="credit" value="Credit card" name="paymentMethod" type="radio" class="custom-control-input" --%>
                   <%--                        required="true"/>--%>
                 <label class="custom-control-label" for="credit">Credit card</label>
               </div>
               <div class="custom-control custom-radio">
-                <form:radiobutton path="paymentMethod" value="Paypal" id="paypal" title="paymentMethod" cssClass="custom-control-input"
+                <form:radiobutton path="paymentMethod" value="PayPal" id="paypal" title="paymentMethod" cssClass="custom-control-input"
                                   required="true"></form:radiobutton>
                   <%--            <form:input path="paymentMethod" id="paypal" value="Paypal" name="paymentMethod" type="radio" class="custom-control-input" --%>
                   <%--                        required="true"/>--%>
@@ -250,6 +241,7 @@
                 <strong>Success!</strong>
                 <span> Your order has been purchased successfully. Thank you for your payment!</span> <br>
                 <span id="paypal-transaction-id"> Transaction ID: </span>
+                <form:hidden path="paymentStatus" id="payment-status" value="0"></form:hidden>
               </div>
             </div>
             <!-- Replace with your own sandbox Business account app client ID -->
@@ -280,7 +272,7 @@
                     $("#paypal-button-container").hide();
                     $("#paypal-success").show();
                     $("#paypal-transaction-id").text(transaction.id);
-
+                    $("#payment-status").val(1);
                   });
                 }
               }).render('#paypal-button-container');
@@ -330,6 +322,19 @@
 
   </div>
 </div>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+  (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/63735561daff0e1306d7772d/1ght8b233';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+  })();
+</script>
+<!--End of Tawk.to Script-->
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>
 
@@ -380,12 +385,12 @@
 <!--===============================================================================================-->
 <script src="/resources/js/main.js"></script>
 <!--===============================================================================================-->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>
+<%--<script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>--%>
 <%--<script>window.jQuery || document.write('<script src="../assets/js//resources/vendor/jquery.slim.min.js"><\/script>')</script>--%>
 <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.02.js"></script>
 <script src="/resources/js/form-validation.js"></script>
 <!--===============================================================================================-->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="/resources/vendor/jquery/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
     $("#province").change(function() {
@@ -432,6 +437,8 @@
   });
 </script>
 <!--===============================================================================================-->
+<%--<script src="/resources/vendor/jquery/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>--%>
+<%--<script src="/resources/js/bootstrap.min.js"></script>--%>
 <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
@@ -443,6 +450,22 @@
       setTimeout(function() {
         $this.button('reset');
       }, 10000);
+    });
+  });
+</script>
+<!--===============================================================================================-->
+<script>
+  $(function() {
+    // when page loaded, COD is selected therefore should hide the Online payment block
+    $("#paypal-button-container").hide();
+
+    $("input:radio[name=paymentMethod]").click(function() {
+      let paymentMethodSelected = $('input:radio[name=paymentMethod]:checked').val();
+      if(paymentMethodSelected == 'PayPal' || paymentMethodSelected == 'CreditCard'){
+        $("#paypal-button-container").show();
+      } else {
+        $("#paypal-button-container").hide();
+      }
     });
   });
 </script>

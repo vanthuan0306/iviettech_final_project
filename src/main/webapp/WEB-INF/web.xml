@@ -12,9 +12,27 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+<!--    <filter>-->
+<!--        <filter-name>UserFilter</filter-name>-->
+<!--        <filter-class>com.iviettech.finalproject.filter.UserFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>UserFilter</filter-name>-->
+<!--        <url-pattern>/user/*</url-pattern>-->
+<!--    </filter-mapping>-->
+
     <servlet-mapping>
         <servlet-name>spring</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/500</location>
+    </error-page>
 
 </web-app>
